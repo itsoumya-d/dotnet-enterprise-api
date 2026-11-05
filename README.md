@@ -1,6 +1,14 @@
-# Orders API — ASP.NET Core reference service
+# Orders & Integration API — ASP.NET Core reference service
 
-A small, production-shaped Web API that demonstrates the stack this repository's author works in day to day: **C#, ASP.NET Core, REST, OpenAPI/Swagger, SQL, EF Core, Azure Service Bus, Azure Cosmos DB, OpenTelemetry, CI/CD and containerisation**. It is a portfolio sample, intentionally small and fully tested.
+A production-shaped Web API for orders, Open Banking and tenant integration
+workflows: **C#, ASP.NET Core, REST, OpenAPI, SQL/EF Core, Azure Service Bus,
+Azure Cosmos DB, OpenTelemetry, API-key protection, retries, dead letters,
+CI/CD and containerisation**.
+
+The integration module adds tenant connection records and idempotent events
+with attempts, exponential backoff, dead-letter handling, retry and API-key
+protection. It is the same control loop used when connecting customer systems
+across bespoke .NET applications and cloud platforms.
 
 ## Stack
 
@@ -32,6 +40,12 @@ A small, production-shaped Web API that demonstrates the stack this repository's
 | `GET` | `/openbanking/v1/payments/{id}` | Read payment status |
 | `GET` | `/openbanking/v1/accounts/{id}/balance` | Read the account balance |
 | `GET` | `/healthz` | Health probe |
+| `POST` | `/api/integrations/tenants` | Register a tenant integration (API key) |
+| `GET` | `/api/integrations/tenants` | List tenant integrations (API key) |
+| `POST` | `/api/integrations/events` | Enqueue an idempotent event (API key) |
+| `POST` | `/api/integrations/events/{id}/process` | Dispatch once and record the outcome (API key) |
+| `POST` | `/api/integrations/events/{id}/retry` | Reset a dead-letter event (API key) |
+| `GET` | `/api/integrations/events/dead-letters` | List dead-letter events (API key) |
 
 Validation rules: customer name required, at least one item, positive quantity, non-negative unit price, status limited to the allowed set. Open Banking payments require an `Authorization: Bearer` token, an authorised consent with `WritePayments`, and an `Idempotency-Key` header.
 
@@ -79,7 +93,10 @@ curl -s -X POST localhost:5000/openbanking/v1/payments \
 dotnet test OrdersApi.slnx
 ```
 
-Nine integration tests cover the orders flow (6) and the Open Banking flow (3): consent + idempotent payment, bearer-token rejection, and idempotency-key conflict.
+Fifteen integration tests cover the orders flow (6), Open Banking (3) and
+tenant integrations (6): API-key rejection, tenant creation, idempotent event
+enqueue, conflict on changed payload, successful dispatch, and dead-letter
+retry after repeated dispatcher failure.
 
 ## Why this repo exists
 

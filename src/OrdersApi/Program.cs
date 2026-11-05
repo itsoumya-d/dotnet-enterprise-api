@@ -12,6 +12,8 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<OpenBankingService>();
+builder.Services.AddScoped<IntegrationService>();
+builder.Services.AddSingleton<IIntegrationDispatcher, NoopIntegrationDispatcher>();
 builder.Services.AddSingleton<IEventPublisher>(services =>
 {
     var options = services.GetRequiredService<IOptions<OpenBankingOptions>>().Value;
@@ -68,6 +70,19 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
 }
 
 app.UseAuthorization();
+app.UseWhen(
+    context => context.Request.Path.StartsWithSegments("/api/integrations"),
+    branch => branch.Use(async (context, next) =>
+    {
+        var configuredKey = context.RequestServices.GetRequiredService<IConfiguration>()["Integrations:ApiKey"];
+        if (string.IsNullOrWhiteSpace(configuredKey) ||
+            context.Request.Headers["X-API-Key"].ToString() != configuredKey)
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+        await next();
+    }));
 app.MapControllers();
 app.MapHealthChecks("/healthz");
 
