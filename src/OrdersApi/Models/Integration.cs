@@ -33,3 +33,16 @@ public class IntegrationEvent
 
 public record CreateTenantRequest(string TenantName, string SourceSystem, string TargetSystem);
 public record EnqueueIntegrationEventRequest(int TenantIntegrationId, string EventType, string IdempotencyKey, string Payload);
+public record ReplayDeadLettersRequest(int? TenantIntegrationId = null, int MaxCount = 50);
+public record DeadLetterReplayResult(int RequeuedCount, List<int> EventIds);
+public record TenantIntegrationSummary(
+    int TenantIntegrationId,
+    string TenantName,
+    string SourceSystem,
+    string TargetSystem,
+    int TotalEvents,
+    int ProcessedCount,
+    int PendingCount,
+    int DeadLetterCount,
+    DateTimeOffset? LastSyncedAt,
+    string HealthStatus);
