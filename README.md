@@ -46,6 +46,9 @@ across bespoke .NET applications and cloud platforms.
 | `POST` | `/api/integrations/events/{id}/process` | Dispatch once and record the outcome (API key) |
 | `POST` | `/api/integrations/events/{id}/retry` | Reset a dead-letter event (API key) |
 | `GET` | `/api/integrations/events/dead-letters` | List dead-letter events (API key) |
+| `POST` | `/api/integrations/events/dead-letters/replay` | Batch-requeue dead-letter events per tenant or globally (API key) |
+| `GET` | `/api/integrations/tenants/{id}/summary` | Return per-tenant event counts, `lastSyncedAt` and health status (API key) |
+| `GET` | `/api/integrations/audit` | Query integration lifecycle audit trail (`processed`, `dead_letter`, `replayed`) (API key) |
 
 Validation rules: customer name required, at least one item, positive quantity, non-negative unit price, status limited to the allowed set. Open Banking payments require an `Authorization: Bearer` token, an authorised consent with `WritePayments`, and an `Idempotency-Key` header.
 
