@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddHealthChecks();
 builder.Services.AddSingleton<OpenBankingService>();
 builder.Services.AddScoped<IntegrationService>();
+builder.Services.AddSingleton<IWorkIntelligenceService, WorkIntelligenceService>();
 builder.Services.AddSingleton<IIntegrationDispatcher, NoopIntegrationDispatcher>();
 builder.Services.AddSingleton<IEventPublisher>(services =>
 {
