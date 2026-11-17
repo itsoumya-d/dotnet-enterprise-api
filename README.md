@@ -49,6 +49,10 @@ across bespoke .NET applications and cloud platforms.
 | `POST` | `/api/integrations/events/dead-letters/replay` | Batch-requeue dead-letter events per tenant or globally (API key) |
 | `GET` | `/api/integrations/tenants/{id}/summary` | Return per-tenant event counts, `lastSyncedAt` and health status (API key) |
 | `GET` | `/api/integrations/audit` | Query integration lifecycle audit trail (`processed`, `dead_letter`, `replayed`) (API key) |
+| `POST` | `/api/erp/business-central/orders/sync` | Idempotent Dynamics 365 Business Central order ledger sync |
+| `POST` | `/api/erp/business-central/inventory/reconcile` | Multi-warehouse inventory reconciliation against ERP ledger |
+| `GET` | `/api/erp/business-central/reconciliations/{id}` | Read reconciliation batch report and discrepancy actions |
+| `POST` | `/api/erp/business-central/dead-letter/recover` | Azure Service Bus dead-letter batch recovery and requeue |
 
 Validation rules: customer name required, at least one item, positive quantity, non-negative unit price, status limited to the allowed set. Open Banking payments require an `Authorization: Bearer` token, an authorised consent with `WritePayments`, and an `Idempotency-Key` header.
 
