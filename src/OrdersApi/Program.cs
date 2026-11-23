@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IWorkIntelligenceService, WorkIntelligenceService>
 builder.Services.AddSingleton<IEngineeringPracticeService, EngineeringPracticeService>();
 builder.Services.AddSingleton<IPropertyRatingMigrationService, PropertyRatingMigrationService>();
 builder.Services.AddSingleton<BusinessCentralIntegrationService>();
+builder.Services.AddSingleton<SreReliabilityService>();
 builder.Services.AddSingleton<IIntegrationDispatcher, NoopIntegrationDispatcher>();
 builder.Services.AddSingleton<IEventPublisher>(services =>
 {
