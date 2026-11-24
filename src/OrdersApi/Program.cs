@@ -18,6 +18,7 @@ builder.Services.AddSingleton<IEngineeringPracticeService, EngineeringPracticeSe
 builder.Services.AddSingleton<IPropertyRatingMigrationService, PropertyRatingMigrationService>();
 builder.Services.AddSingleton<BusinessCentralIntegrationService>();
 builder.Services.AddSingleton<SreReliabilityService>();
+builder.Services.AddSingleton<EnergyTradingRiskService>();
 builder.Services.AddSingleton<IIntegrationDispatcher, NoopIntegrationDispatcher>();
 builder.Services.AddSingleton<IEventPublisher>(services =>
 {
